@@ -1,5 +1,4 @@
 from threading import Event
-from time import sleep
 from random import randint
 from termcolor import cprint
 
