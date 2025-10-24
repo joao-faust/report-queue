@@ -1,14 +1,12 @@
 from threading import Event
 from random import randint
 from termcolor import cprint
+from uuid import uuid4
 
 from app.Queue import Queue
 from app.report.Report import Report
-from app.report.ReportManager import ReportManager
 
-manager = ReportManager('./output')
-
-def generate_report(thread_evt: Event, queue: Queue[Report]):
+def generate_report(queue: Queue[Report], outdir: str, thread_evt: Event):
   while not thread_evt.is_set():
     if queue.has_values():
       thread_evt.wait(randint(30, 60))
@@ -18,7 +16,8 @@ def generate_report(thread_evt: Event, queue: Queue[Report]):
       if not report:
         continue
 
-      filepath = manager.generate(report)
+      filename = str(uuid4()).replace('-', '')
+      filepath = report.generate(f'{outdir}/{filename}')
       queue.dequeue()
 
       name = report.get_name()

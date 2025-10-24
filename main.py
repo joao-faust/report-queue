@@ -11,7 +11,7 @@ report_queue = Queue[Report]()
 thread_evt = Event()
 
 try:
-  Thread(target=generate_report, args=(thread_evt, report_queue,)).start()
+  Thread(target=generate_report, args=(report_queue, 'output', thread_evt,)).start()
   show_menu(ReportMenu(report_queue))
 except BaseException as err:
   report_queue.clear()
